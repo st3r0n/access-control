@@ -1,0 +1,86 @@
+acces control vulns can be used for
+priv esc
+admin access
+various roles on the server
+
+1.unprotected admin fucntionality
+access admin directly
+
+2. access admin funtionality with unpredicatables url
+url can be found either in source code or robots or sitemap or other sources
+
+
+3.parameter based access control
+aither some url paramter or request parametr must have a fiels that can give us admin functionality
+eg
+https://insecure-website.com/login/home.jsp?admin=true
+https://insecure-website.com/login/home.jsp?role=1
+
+check them also
+ A hidden field.
+A cookie.
+A preset query string parameter
+
+
+4.look for response field it can give potential parameters and values
+and if json is being used sometimes it can be used to add that paratmeter into it 
+and can give us admin access
+
+
+5.broken access control from platform misconfiguration
+suppose post method and /admin functionality is disabled
+then we can use headers such as
+X-Original-URL: or X-Rewrite-URL or sometimes localhost to bypass it
+if we use any headers and provide arbitrary input to it if it gives not found then we can confirm 
+the headers can be used
+
+
+6.http verb tampering
+try to use different methods like  POST PUT OPTIONS TRACE GET to get pass
+
+
+7.Broken access control resulting from URL-matching discrepancies
+eg ADMIN and admin are mapped to same thing ar AdMin or AdMIN anything that can be used to get pass the access control
+
+#NOTE in spring 5.3 admin/delete.aything will be matched to admin/delete    ----> so it can be usde to get to admin functionality as well as perform some actions
+
+
+8.horizontal priv-esc using IDOR
+idor can be used to access other users it can be cahnging any value in parameter or cookie
+
+
+9.unpredicatalbe user id for idor
+suppose if we cannot guess the unique id for the horizontal priv esc 
+then we can enum web server for possible palces like ---commments author blog url etc to look for user ids
+
+
+10 . sometimes our request is not successful but it still gives us useful data such as api keys or uids
+
+
+11.horizontal priv esc can sometimes give us with functionality such as error messages or functionality to change ones password suck as idor
+sometimes password can be disclosedd too
+
+
+
+12. IDOR can be used to get pass access or get something useful
+
+
+13.referer based access control
+some pages have strong accessc ontrol on /admin pages but for its sub pages it only relies on refereer haeder
+eg reffrere: /admin then we can access any sub page like /admin/dekte  /admin/users etc
+
+
+
+14. multistep process with no access control on one step
+ For example, the administrative function to update user details might involve the following steps:
+
+    Load the form that contains details for a specific user.
+    Submit the changes.
+    Review the changes and confirm.
+
+Sometimes, a website will implement rigorous access controls over some of these steps, but ignore others. 
+Imagine a website where access controls are correctly applied to the first and second steps, but not to the third step. 
+The website assumes that a user will only reach step 3 if they have already completed the first steps, which are properly controlled. 
+An attacker can gain unauthorized access to the function by skipping the first two steps and directly submitting the request for the third step with the required parameters. 
+
+replay attcks
